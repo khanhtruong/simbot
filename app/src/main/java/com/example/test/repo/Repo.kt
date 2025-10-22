@@ -12,10 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
-import retrofit2.HttpException
 
-class Repo(
-) {
+class Repo {
     private val apiService: ApiService
 
     init {
@@ -42,12 +40,12 @@ class Repo(
                         )
                         emit(data)
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        throw (e)
                     }
                 }
             }
         } catch (e: Exception) {
-            throw (e)
+            e.printStackTrace()
         } finally {
             input.close()
         }
