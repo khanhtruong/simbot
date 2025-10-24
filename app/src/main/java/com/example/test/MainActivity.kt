@@ -14,16 +14,42 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.SettingsCell
+import androidx.compose.material.icons.filled.SettingsPhone
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.FloatingToolbarDefaults
+import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,13 +57,14 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,17 +73,24 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.view.WindowCompat
+import androidx.xr.compose.material3.ExperimentalMaterial3XrApi
+import androidx.xr.compose.material3.HorizontalFloatingToolbar
 import com.example.test.ui.theme.TestTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 data class MessageInfo(
-    val message: String,
-    val isCurrentUser: Boolean,
-    val isLoaded: Boolean,
-    val id: String
+    val message: String, val isCurrentUser: Boolean, val isLoaded: Boolean, val id: String
 )
+
+object Destination {
+    val entries = listOf<String>(
+        "Home",
+        "Chat",
+        "Login",
+    )
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,16 +100,84 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
+
             TestTheme {
-                Scaffold { innerPadding ->
+                Scaffold(
+                ) { innerPadding ->
+
+                    BottomToolBar(innerPadding)
                     ChatPage(
                         modifier = Modifier
-                            .padding(innerPadding)
-                            .consumeWindowInsets(innerPadding)
                             .imePadding()
+//                            .padding(innerPadding)
+//                            .consumeWindowInsets(innerPadding)
                     )
+
                 }
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3XrApi::class)
+@Composable
+fun BottomToolBar(innerPadding: PaddingValues) {
+    var isExpanded by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        delay(3000L)
+        isExpanded = true
+    }
+
+    Box(
+        modifier = Modifier
+            .background(Color.Red)
+            .fillMaxSize()
+            .padding(innerPadding)
+    ) {
+        Column(
+            modifier = Modifier
+                .background(Color.Blue, shape = RoundedCornerShape(16.dp))
+                .align(Alignment.BottomCenter)
+        ) {
+            HorizontalFloatingToolbar(
+                expanded = isExpanded,
+                colors = FloatingToolbarDefaults.standardFloatingToolbarColors().copy(
+                        toolbarContainerColor = Color.Transparent,
+                    ),
+                leadingContent = {
+                    IconButton(
+                        onClick = {}) {
+                        Icon(
+                            imageVector = Icons.Filled.SettingsCell, contentDescription = null
+                        )
+                    }
+                },
+                trailingContent = {
+                    IconButton(
+                        onClick = {}) {
+                        Icon(
+                            imageVector = Icons.Filled.SettingsPhone, contentDescription = null
+                        )
+                    }
+                },
+                content = {
+                    FilledIconButton(
+                        modifier = Modifier.width(64.dp), onClick = { /* doSomething() */ }) {
+                        Icon(Icons.Filled.Add, contentDescription = null)
+                    }
+                    IconButton(
+                        onClick = {}) {
+                        Icon(
+                            imageVector = Icons.Filled.MoreVert, contentDescription = null
+                        )
+                    }
+                    IconButton(
+                        onClick = {}) {
+                        Icon(
+                            imageVector = Icons.Filled.Settings, contentDescription = null
+                        )
+                    }
+                })
         }
     }
 }
@@ -88,8 +190,7 @@ fun ChatPage(modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
 
     ConstraintLayout(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         val (list, input) = createRefs()
 
@@ -109,11 +210,9 @@ fun ChatPage(modifier: Modifier = Modifier) {
             state = listState,
         ) {
             items(
-                count = messages.size,
-                key = { index ->
+                count = messages.size, key = { index ->
                     messages[index].id
-                }
-            ) { index ->
+                }) { index ->
                 MessageItem(
                     message = messages[index].message,
                     isCurrentUser = messages[index].isCurrentUser,
@@ -137,8 +236,7 @@ fun ChatPage(modifier: Modifier = Modifier) {
                 },
         ) {
             TextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 value = text,
                 onValueChange = { text = it },
                 keyboardOptions = KeyboardOptions(
@@ -191,13 +289,10 @@ fun MessageItem(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        horizontalAlignment = alignment
+            .padding(8.dp), horizontalAlignment = alignment
     ) {
         Surface(
-            shape = MaterialTheme.shapes.medium,
-            shadowElevation = 1.dp,
-            color = backgroundColor
+            shape = MaterialTheme.shapes.medium, shadowElevation = 1.dp, color = backgroundColor
         ) {
             Text(
                 text = displayedText,
@@ -215,8 +310,7 @@ fun PreviewChat() {
     TestTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             Box(
-                modifier = Modifier
-                    .padding(innerPadding)
+                modifier = Modifier.padding(innerPadding)
             ) {
                 ChatPage()
             }
