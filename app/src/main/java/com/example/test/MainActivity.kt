@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -65,6 +67,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -106,12 +109,12 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
 
                     BottomToolBar(innerPadding)
-                    ChatPage(
-                        modifier = Modifier
-                            .imePadding()
-//                            .padding(innerPadding)
-//                            .consumeWindowInsets(innerPadding)
-                    )
+//                    ChatPage(
+//                        modifier = Modifier
+//                            .imePadding()
+////                            .padding(innerPadding)
+////                            .consumeWindowInsets(innerPadding)
+//                    )
 
                 }
             }
@@ -122,60 +125,136 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3XrApi::class)
 @Composable
 fun BottomToolBar(innerPadding: PaddingValues) {
-    var isExpanded by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        delay(3000L)
-        isExpanded = true
-    }
-
     Box(
         modifier = Modifier
-            .background(Color.Red)
             .fillMaxSize()
             .padding(innerPadding)
     ) {
         Column(
             modifier = Modifier
-                .background(Color.Blue, shape = RoundedCornerShape(16.dp))
-                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .background(Color(0x33A6A6A6), shape = RoundedCornerShape(16.dp))
+                .border(color = Color.Red, width = 1.dp, shape = RoundedCornerShape(16.dp))
+                .align(Alignment.BottomCenter),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             HorizontalFloatingToolbar(
-                expanded = isExpanded,
+                expanded = false,
+                modifier = Modifier,
                 colors = FloatingToolbarDefaults.standardFloatingToolbarColors().copy(
-                        toolbarContainerColor = Color.Transparent,
-                    ),
-                leadingContent = {
-                    IconButton(
-                        onClick = {}) {
-                        Icon(
-                            imageVector = Icons.Filled.SettingsCell, contentDescription = null
-                        )
-                    }
-                },
-                trailingContent = {
-                    IconButton(
-                        onClick = {}) {
-                        Icon(
-                            imageVector = Icons.Filled.SettingsPhone, contentDescription = null
-                        )
-                    }
-                },
+                    toolbarContainerColor = Color.Transparent,
+                ),
                 content = {
-                    FilledIconButton(
-                        modifier = Modifier.width(64.dp), onClick = { /* doSomething() */ }) {
+                    var selected by remember { mutableStateOf(0) }
+
+                    IconButton(
+                        modifier = Modifier.then(
+                            if (selected == 0) {
+                                Modifier.background(
+                                    Brush.linearGradient(
+                                        listOf(
+                                            Color(0xFFFF0007),
+                                            Color(0xFF0A2DFF)
+                                        )
+                                    ),
+                                    shape = CircleShape
+                                )
+                            } else {
+                                Modifier
+                            }
+                        ),
+                        onClick = { selected = 0 }
+                    ) {
                         Icon(Icons.Filled.Add, contentDescription = null)
                     }
+
                     IconButton(
-                        onClick = {}) {
+                        modifier = Modifier.then(
+                            if (selected == 1) {
+                                Modifier.background(
+                                    Brush.linearGradient(
+                                        listOf(
+                                            Color(0xFFFF0007),
+                                            Color(0xFF0A2DFF)
+                                        )
+                                    ),
+                                    shape = CircleShape
+                                )
+                            } else {
+                                Modifier
+                            }
+                        ),
+                        onClick = { selected = 1 }
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.MoreVert, contentDescription = null
                         )
                     }
+
                     IconButton(
-                        onClick = {}) {
+                        modifier = Modifier.then(
+                            if (selected == 2) {
+                                Modifier.background(
+                                    Brush.linearGradient(
+                                        listOf(
+                                            Color(0xFFFF0007),
+                                            Color(0xFF0A2DFF)
+                                        )
+                                    ),
+                                    shape = CircleShape
+                                )
+                            } else {
+                                Modifier
+                            }
+                        ),
+                        onClick = { selected = 2 }
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.Settings, contentDescription = null
                         )
+                    }
+
+                    IconButton(
+                        modifier = Modifier.then(
+                            if (selected == 3) {
+                                Modifier.background(
+                                    Brush.linearGradient(
+                                        listOf(
+                                            Color(0xFFFF0007),
+                                            Color(0xFF0A2DFF)
+                                        )
+                                    ),
+                                    shape = CircleShape
+                                )
+                            } else {
+                                Modifier
+                            }
+                        ),
+                        onClick = { selected = 3 }
+                    ) {
+                        Icon(Icons.Filled.Add, contentDescription = null)
+                    }
+
+                    IconButton(
+                        modifier = Modifier.then(
+                            if (selected == 4) {
+                                Modifier.background(
+                                    Brush.linearGradient(
+                                        listOf(
+                                            Color(0xFFFF0007),
+                                            Color(0xFF0A2DFF)
+                                        )
+                                    ),
+                                    shape = CircleShape
+                                )
+                            } else {
+                                Modifier
+                            }
+                        ),
+                        onClick = { selected = 4 }
+                    ) {
+                        Icon(Icons.Filled.Add, contentDescription = null)
                     }
                 })
         }
