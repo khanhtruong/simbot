@@ -75,11 +75,10 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.androidx.compose.material.icons.extended)
-
-
+    implementation(libs.kotlinx.serialization)
 
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
-    implementation("com.google.firebase:firebase-analytics")
+    implementation(libs.firebase.bom)
+    implementation(libs.firebase.analytics)
 }
