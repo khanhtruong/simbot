@@ -1,4 +1,4 @@
-package com.example.test.model
+package com.example.testcdappdis.model
 
 sealed class SSEStatus {
     object isLoading : SSEStatus()

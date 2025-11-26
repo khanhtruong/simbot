@@ -1,14 +1,9 @@
-package com.example.test
+package com.example.testcdappdis
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollScope
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,7 +19,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -45,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.view.WindowCompat
-import com.example.test.ui.theme.TestTheme
+import com.example.testcdappdis.ui.theme.TestTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -54,14 +48,6 @@ import kotlin.random.Random
 data class MessageInfo(
     val message: String, val isCurrentUser: Boolean, val isLoaded: Boolean, val id: String
 )
-
-object Destination {
-    val entries = listOf<String>(
-        "Home",
-        "Chat",
-        "Login",
-    )
-}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,14 +62,10 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier,
                 ) { innerPadding ->
-                    Column {
-                        ChatPage(
-                            modifier = Modifier
-                                .padding(innerPadding)
-                        )
-
-
-                    }
+                    AppRoot(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                    )
                 }
             }
         }

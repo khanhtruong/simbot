@@ -1,15 +1,20 @@
+import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
+
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.firebase.appdistribution")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.example.test"
+    namespace = "com.example.testcdappdis"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.test"
+        applicationId = "com.example.testcdappdis"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -25,6 +30,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            firebaseAppDistribution {
+                releaseNotes = "Release v0.0.1"
+                groups = "android-testers"
+                serviceCredentialsFile = "$rootDir/app/keystore/fir-cd-app-dis-4f39e91e0e70.json"
+                artifactType = "apk"
+            }
         }
     }
     compileOptions {
@@ -49,6 +61,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -62,4 +75,11 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.androidx.compose.material.icons.extended)
+
+
+
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
+    implementation("com.google.firebase:firebase-analytics")
 }

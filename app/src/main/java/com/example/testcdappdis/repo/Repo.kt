@@ -1,9 +1,9 @@
-package com.example.test.repo
+package com.example.testcdappdis.repo
 
-import com.example.test.model.DataModel
-import com.example.test.model.SSEStatus
-import com.example.test.repo.network.ApiService
-import com.example.test.repo.network.ApiServiceImpl
+import com.example.testcdappdis.model.DataModel
+import com.example.testcdappdis.model.SSEStatus
+import com.example.testcdappdis.repo.network.ApiService
+import com.example.testcdappdis.repo.network.ApiServiceImpl
 import com.google.gson.Gson
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
